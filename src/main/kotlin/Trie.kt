@@ -1,4 +1,4 @@
-class Trie(dictionary: List<String>) {
+class Trie(dictionary: Set<String>) {
 
     private val root = TrieNode(char = '*')
 
@@ -10,9 +10,12 @@ class Trie(dictionary: List<String>) {
 
     fun contains(word: String) = root.contains(word.lowercase())
 
-    fun getPossibleWords(char: Char, gameBoard: GameBoard): Set<String> {
+    fun getPossibleWords(gameBoard: GameBoard): Set<String> {
         val accumulator = mutableSetOf<String>()
-        root.getPossibleWords(char, gameBoard, accumulator)
+
+        for (char in gameBoard.allChars) {
+            root.getPossibleWords(char, gameBoard, accumulator)
+        }
 
         return accumulator
     }

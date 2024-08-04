@@ -1,5 +1,7 @@
 class GameBoard(private val charSets: List<Set<Char>>) {
 
+    val allChars = charSets.flatten().toSet()
+
     private val siblingChars =
         charSets
             .flatMap { set ->
@@ -13,9 +15,7 @@ class GameBoard(private val charSets: List<Set<Char>>) {
         siblingChars[char] ?: setOf()
 
     fun getValidNextChars(char: Char) =
-        charSets
-            .flatten()
-            .toSet()
+        allChars
             .minus(getSiblings(char))
             .minus(char)
 }

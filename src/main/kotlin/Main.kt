@@ -1,8 +1,18 @@
-fun main(args: Array<String>) {
-    val trie = Trie(dictionary = listOf("Hello", "World"))
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileReader
 
-    println(trie.contains("Hello"))
-    println(trie.contains("false"))
+fun main(args: Array<String>) {
+    val dictionary = mutableSetOf<String>()
+    val file = File("src/main/resources/simple_dict.csv")
+
+    BufferedReader(FileReader(file)).use { reader ->
+        reader.forEachLine { word ->
+            dictionary.add(word)
+        }
+    }
+
+    val trie = Trie(dictionary = dictionary)
 
     val game =
         GameBoard(
@@ -13,4 +23,6 @@ fun main(args: Array<String>) {
                 setOf('E', 'O', 'I')
             )
         )
+
+    val possibleWords = trie.getPossibleWords(gameBoard = game)
 }
