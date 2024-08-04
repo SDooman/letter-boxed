@@ -14,10 +14,10 @@ class Trie(dictionary: Set<String>) {
         val accumulator = mutableSetOf<String>()
 
         for (char in gameBoard.allChars) {
-            root.getPossibleWords(char, gameBoard, accumulator)
+            root.getPossibleWords(char.lowercaseChar(), gameBoard, accumulator)
         }
 
-        return accumulator
+        return accumulator.filter { it.length > 1 }.toSet()
     }
 }
 
