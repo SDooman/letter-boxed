@@ -15,12 +15,14 @@ class Solver(dictionary: Set<String>, private val game: Game) {
             return sol
         }
 
-        val coveredChars =
-            sol
-                .flatMap { it.toCharArray().toSet() }
-                .toSet()
-
-        val missingChars = game.allChars.minus(coveredChars)
+        val missingChars =
+            game
+                .allChars
+                .minus(
+                    sol
+                        .flatMap { it.toCharArray().toSet() }
+                        .toSet()
+                )
 
         val candidates =
             sol
@@ -28,12 +30,12 @@ class Solver(dictionary: Set<String>, private val game: Game) {
                 ?.let { mostRecentWord ->
                     groupedByFirstLetter[mostRecentWord.last()]
                         ?.sortedByDescending {
-                            it.toCharArray().toSet().intersect(missingChars).size
+                            objectiveFunction(word = it, missingChars = missingChars)
                         }
                         ?: listOf()
                 }
                 ?: possibleWords.sortedByDescending {
-                    it.toCharArray().toSet().intersect(missingChars).size
+                    objectiveFunction(word = it, missingChars = missingChars)
                 }
 
         if (sol.size < game.maxWords) {
@@ -51,6 +53,9 @@ class Solver(dictionary: Set<String>, private val game: Game) {
 
         return null
     }
+
+    private fun objectiveFunction(word: String, missingChars: Set<Char>) =
+        word.toCharArray().toSet().intersect(missingChars).size
 
     private fun isSolved(words: List<String>) =
         words
