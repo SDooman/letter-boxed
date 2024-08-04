@@ -8,8 +8,6 @@ class Trie(dictionary: Set<String>) {
         }
     }
 
-    fun contains(word: String) = root.contains(word.lowercase())
-
     fun getPossibleWords(game: Game): Set<String> {
         val accumulator = mutableSetOf<String>()
 
@@ -61,16 +59,6 @@ private class TrieNode(
             child.insert(chars, index + 1)
         }
     }
-
-    fun contains(word: String) = contains(word, 0)
-
-    private fun contains(word: String, index: Int): Boolean =
-        children[word[index]]?.let { child ->
-            if (index == word.length - 1)
-                child.endsWord
-            else
-                child.contains(word, index + 1)
-        } ?: false
 
     fun getPossibleWords(char: Char, game: Game, acc: MutableSet<String>) {
         children[char]?.let { child ->
