@@ -4,32 +4,16 @@ class Solver(dictionary: Set<String>, private val game: Game) {
 
     private val possibleWords = trie.getPossibleWords(game)
 
-    private val orderedByLength =
-        possibleWords
-            .sortedByDescending { it.length }
-
-    private val groupedByLetter =
+    private val groupedByFirstLetter =
         possibleWords
             .groupBy { it.first() }
 
-    fun solve(): List<String>? {
-        for (word in orderedByLength) {
-            val solution = solveInternal(sol = mutableListOf(word))
-
-            if (solution != null) {
-                return solution
-            }
-        }
-
-        return null
-    }
+    fun solve() = solveInternal(sol = mutableListOf())
 
     private fun solveInternal(sol: MutableList<String>): List<String>? {
         if (isSolved(sol)) {
             return sol
         }
-
-        val mostRecentWord = sol.last()
 
         val coveredChars =
             sol
@@ -39,16 +23,22 @@ class Solver(dictionary: Set<String>, private val game: Game) {
         val missingChars = game.allChars.minus(coveredChars)
 
         val candidates =
-            groupedByLetter[mostRecentWord.last()]
-                ?.sortedByDescending {
+            sol
+                .lastOrNull()
+                ?.let { mostRecentWord ->
+                    groupedByFirstLetter[mostRecentWord.last()]
+                        ?.sortedByDescending {
+                            it.toCharArray().toSet().intersect(missingChars).size
+                        }
+                        ?: listOf()
+                }
+                ?: possibleWords.sortedByDescending {
                     it.toCharArray().toSet().intersect(missingChars).size
                 }
-                ?: listOf()
 
         if (sol.size < game.maxWords) {
             for (candidate in candidates) {
                 sol.add(candidate)
-                println("Trying ${sol.joinToString(",")}")
                 val result = solveInternal(sol)
 
                 if (result != null) {
