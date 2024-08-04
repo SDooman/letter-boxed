@@ -1,4 +1,4 @@
-class GameBoard(charSets: List<Set<Char>>) {
+class Game(charSets: List<Set<Char>>, val maxWords: Int) {
 
     private val charSetsLowerCase =
         charSets.map { row ->

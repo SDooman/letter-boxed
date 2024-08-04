@@ -12,19 +12,18 @@ fun main(args: Array<String>) {
         }
     }
 
-    val trie = Trie(dictionary = dictionary)
-
     val game =
-        GameBoard(
-            listOf(
+        Game(
+            charSets = listOf(
                 setOf('B', 'L', 'V'),
                 setOf('T', 'P', 'M'),
                 setOf('J', 'S', 'C'),
                 setOf('E', 'O', 'I')
-            )
+            ),
+            maxWords = 6
         )
 
-    val possibleWords = trie.getPossibleWords(gameBoard = game)
+    val solver = Solver(dictionary = dictionary, game = game)
 
-    println(possibleWords.random())
+    println(solver.solve())
 }
