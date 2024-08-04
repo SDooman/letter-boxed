@@ -1,9 +1,16 @@
-class GameBoard(private val charSets: List<Set<Char>>) {
+class GameBoard(charSets: List<Set<Char>>) {
 
-    val allChars = charSets.flatten().map { it.lowercaseChar() }.toSet()
+    private val charSetsLowerCase =
+        charSets.map { row ->
+            row.map {
+                it.lowercaseChar()
+            }.toSet()
+        }
+
+    val allChars = charSetsLowerCase.flatten().toSet()
 
     private val siblingChars =
-        charSets
+        charSetsLowerCase
             .flatMap { set ->
                 set.map {
                     it to set.minus(it)

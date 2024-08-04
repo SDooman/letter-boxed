@@ -24,9 +24,7 @@ fun main(args: Array<String>) {
             )
         )
 
-    println(trie.contains("job"))
-
     val possibleWords = trie.getPossibleWords(gameBoard = game)
 
-    println(possibleWords.take(10))
+    println(possibleWords.random())
 }
