@@ -9,6 +9,13 @@ class Trie(dictionary: List<String>) {
     }
 
     fun contains(word: String) = root.contains(word.lowercase())
+
+    fun getPossibleWords(char: Char, gameBoard: GameBoard): Set<String> {
+        val accumulator = mutableSetOf<String>()
+        root.getPossibleWords(char, gameBoard, accumulator)
+
+        return accumulator
+    }
 }
 
 private class TrieNode(
@@ -61,4 +68,16 @@ private class TrieNode(
             else
                 child.contains(word, index + 1)
         } ?: false
+
+    fun getPossibleWords(char: Char, gameBoard: GameBoard, acc: MutableSet<String>) {
+        children[char]?.let { child ->
+            child.word?.let {
+                acc.add(it)
+            }
+
+            for (nextChar in gameBoard.getValidNextChars(char)) {
+                child.getPossibleWords(nextChar, gameBoard, acc)
+            }
+        }
+    }
 }
