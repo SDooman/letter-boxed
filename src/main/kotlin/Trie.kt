@@ -30,14 +30,14 @@ private class TrieNode(
     val word: String?
         get() =
             if (endsWord)
-                StringBuilder().let {
-                    var currentNode = this
+                buildString {
+                    var currentNode = this@TrieNode
                     while (currentNode.parent != null) {
-                        it.append(currentNode.char)
+                        append(currentNode.char)
                         currentNode = currentNode.parent!!
                     }
-                    return it.reverse().toString()
                 }
+                    .reversed()
             else
                 null
 
